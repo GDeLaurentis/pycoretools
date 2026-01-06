@@ -19,9 +19,6 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
-        'numpy<2.0',
-        'pyadic',
-        'syngular',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',
