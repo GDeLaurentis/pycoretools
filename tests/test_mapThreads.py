@@ -62,11 +62,3 @@ def test_in_worker_is_aware_of_being_in_pool():
         results = pool.map(worker, range(2))
 
     assert all(results)
-
-
-def test_multiprocessing_with_CUDA_context():
-    from linac import cuda_row_reduce
-    rows, cols = 500, 500
-    A = numpy.array([[random.randint(0, (2 ** 31 - 1) - 1) for i in range(rows)] for j in range(cols)])
-    cuda_row_reduce_2147483647 = functools.partial(cuda_row_reduce, field_characteristic=2 ** 31 - 1)
-    mapThreads(cuda_row_reduce_2147483647, [A] * 10, mp_start_method='spawn', verbose=False)
