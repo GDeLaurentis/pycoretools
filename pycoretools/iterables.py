@@ -15,7 +15,7 @@ def _is_sympy_mutable_dense_matrix(x) -> bool:
 
 def flatten(temp_list, recursion_level: int = 0, treat_list_subclasses_as_list: bool = True,
             treat_tuples_as_lists: bool = False, max_recursion=None):
-    
+
     flat_list = []
 
     for entry in temp_list:
@@ -26,16 +26,13 @@ def flatten(temp_list, recursion_level: int = 0, treat_list_subclasses_as_list: 
         t = type(entry)
 
         should_recurse = (
-            t is list
-            or (
-                treat_list_subclasses_as_list
-                and (
-                    isinstance(entry, list)
-                    or _is_numpy_ndarray(entry)
-                    or _is_sympy_mutable_dense_matrix(entry)
+            t is list or (
+                treat_list_subclasses_as_list and (
+                    isinstance(entry, list) or
+                    _is_numpy_ndarray(entry) or
+                    _is_sympy_mutable_dense_matrix(entry)
                 )
-            )
-            or (treat_tuples_as_lists and t is tuple)
+            ) or (treat_tuples_as_lists and t is tuple)
         )
 
         if should_recurse:
@@ -59,7 +56,7 @@ def crease(iterable, template, depth, called_recursively=False, verbose=False):
         creased_iterable = template
     if verbose:
         print(f"len(iterable): {len(iterable)}, len(flatten(template, max_recursion={depth})): {len(flatten(template, max_recursion=depth))}")
-    assert len(iterable) == len(flatten(template, max_recursion=depth))
+    assert len(iterable) == len(flatten(template, max_recursion=depth)), f"Expected {len(flatten(template, max_recursion=depth))} elements at depth {depth}"
     if depth == 0:
         for i, _ in enumerate(creased_iterable):
             creased_iterable[i] = iterable[i]
@@ -68,9 +65,13 @@ def crease(iterable, template, depth, called_recursively=False, verbose=False):
     elif depth > 0:
         for i, _ in enumerate(creased_iterable):
             if verbose:
-                print(f"slice: {len(flatten(creased_iterable[:i], max_recursion=1))}:{len(flatten(creased_iterable[:i + 1], max_recursion=1))}")
-            ith_iterable = iterable[len(flatten(creased_iterable[:i], max_recursion=1)):len(flatten(creased_iterable[:i + 1], max_recursion=1))]
-            creased_iterable[i] = crease(ith_iterable, creased_iterable[i], depth=depth - 1, called_recursively=True, verbose=verbose)
+                print(f"slice: {len(flatten(creased_iterable[:i], max_recursion=depth))}:{len(flatten(creased_iterable[:i + 1], max_recursion=depth))}")
+            ith_iterable = iterable[len(flatten(creased_iterable[:i], max_recursion=depth)):len(flatten(creased_iterable[:i + 1], max_recursion=depth))]
+            if flatten(creased_iterable[i]) == creased_iterable[i]:  # might need to terminate sooner for rugged depth
+                assert len(flatten(ith_iterable)) == len(creased_iterable[i])
+                creased_iterable[i] = flatten(ith_iterable)
+            else:
+                creased_iterable[i] = crease(ith_iterable, creased_iterable[i], depth=depth - 1, called_recursively=True, verbose=verbose)
         assert flatten(creased_iterable) == iterable
         return creased_iterable
     else:

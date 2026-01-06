@@ -1,7 +1,4 @@
-import numpy
 import pytest
-import random
-import functools
 
 from multiprocessing import Pool
 from pycoretools.concurrency import mapThreads, MyProcessPool, _init, _in_worker, worker
