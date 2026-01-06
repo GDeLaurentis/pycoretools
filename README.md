@@ -2,7 +2,7 @@
 
 [![CI Lint](https://github.com/GDeLaurentis/pycoretools/actions/workflows/ci_lint.yml/badge.svg)](https://github.com/GDeLaurentis/pycoretools/actions/workflows/ci_lint.yml)
 [![CI Test](https://github.com/GDeLaurentis/pycoretools/actions/workflows/ci_test.yml/badge.svg)](https://github.com/GDeLaurentis/pycoretools/actions/workflows/ci_test.yml)
-[![Coverage](https://img.shields.io/badge/Coverage-52%25-orange?labelColor=2a2f35)](https://github.com/GDeLaurentis/pycoretools/actions)
+[![Coverage](https://img.shields.io/badge/Coverage-53%25-orange?labelColor=2a2f35)](https://github.com/GDeLaurentis/pycoretools/actions)
 [![PyPI](https://img.shields.io/pypi/v/pycoretools?label=PyPI)](https://pypi.org/project/pycoretools/)
 [![Python](https://img.shields.io/pypi/pyversions/pycoretools?label=Python)](https://pypi.org/project/pycoretools/)
 
