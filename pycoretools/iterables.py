@@ -3,23 +3,48 @@ import itertools
 from copy import deepcopy
 
 
-def flatten(temp_list, recursion_level=0, treat_list_subclasses_as_list=True, treat_tuples_as_lists=False, max_recursion=None):
-    from sympy.matrices.dense import MutableDenseMatrix
-    from numpy import ndarray
+def _is_numpy_ndarray(x) -> bool:
+    t = type(x)
+    return t.__module__ == "numpy" and t.__name__ == "ndarray"
+
+
+def _is_sympy_mutable_dense_matrix(x) -> bool:
+    t = type(x)
+    return t.__module__ == "sympy.matrices.dense" and t.__name__ == "MutableDenseMatrix"
+
+
+def flatten(temp_list, recursion_level: int = 0, treat_list_subclasses_as_list: bool = True,
+            treat_tuples_as_lists: bool = False, max_recursion=None):
+    
     flat_list = []
+
     for entry in temp_list:
-        if type(entry) is list and (max_recursion is None or recursion_level < max_recursion):
-            flat_list += flatten(entry, recursion_level=recursion_level + 1, treat_list_subclasses_as_list=treat_list_subclasses_as_list,
-                                 treat_tuples_as_lists=treat_tuples_as_lists, max_recursion=max_recursion)
-        elif ((issubclass(type(entry), list) or type(entry) in [MutableDenseMatrix, ndarray]) and
-              treat_list_subclasses_as_list is True and (max_recursion is None or recursion_level < max_recursion)):
-            flat_list += flatten(entry, recursion_level=recursion_level + 1, treat_list_subclasses_as_list=treat_list_subclasses_as_list,
-                                 treat_tuples_as_lists=treat_tuples_as_lists, max_recursion=max_recursion)
-        elif (type(entry) is tuple and treat_tuples_as_lists is True and (max_recursion is None or recursion_level < max_recursion)):
-            flat_list += flatten(entry, recursion_level=recursion_level + 1, treat_list_subclasses_as_list=treat_list_subclasses_as_list,
-                                 treat_tuples_as_lists=treat_tuples_as_lists, max_recursion=max_recursion)
+        if max_recursion is not None and recursion_level >= max_recursion:
+            flat_list.append(entry)
+            continue
+
+        t = type(entry)
+
+        should_recurse = (
+            t is list
+            or (
+                treat_list_subclasses_as_list
+                and (
+                    isinstance(entry, list)
+                    or _is_numpy_ndarray(entry)
+                    or _is_sympy_mutable_dense_matrix(entry)
+                )
+            )
+            or (treat_tuples_as_lists and t is tuple)
+        )
+
+        if should_recurse:
+            flat_list.extend(
+                flatten(entry, recursion_level + 1, treat_list_subclasses_as_list, treat_tuples_as_lists, max_recursion, )
+            )
         else:
-            flat_list += [entry]
+            flat_list.append(entry)
+
     return flat_list
 
 
@@ -60,75 +85,3 @@ def chunks(l, n):
 
 def all_non_empty_subsets(iterable):
     return itertools.chain(*map(lambda x: itertools.combinations(iterable, x), range(1, len(iterable) + 1)))
-
-
-# FOLLOWING TO BE CHECKED
-
-# from collections.abc import Iterable
-
-
-def _is_numpy_ndarray(x) -> bool:
-    t = type(x)
-    return t.__module__ == "numpy" and t.__name__ == "ndarray"
-
-
-def _is_sympy_mutable_dense_matrix(x) -> bool:
-    t = type(x)
-    return t.__module__ == "sympy.matrices.dense" and t.__name__ == "MutableDenseMatrix"
-
-
-def flatten_new(
-    temp_list,
-    recursion_level: int = 0,
-    treat_list_subclasses_as_list: bool = True,
-    treat_tuples_as_lists: bool = False,
-    max_recursion=None,
-):
-    flat_list = []
-    for entry in temp_list:
-        if max_recursion is not None and recursion_level >= max_recursion:
-            flat_list.append(entry)
-            continue
-
-        t = type(entry)
-
-        is_plain_list = (t is list)
-        is_list_subclass = (t is not list and isinstance(entry, list))  # list subclasses
-        is_tuple = (t is tuple)
-        is_numpy = _is_numpy_ndarray(entry)
-        is_sympy = _is_sympy_mutable_dense_matrix(entry)
-
-        if is_plain_list:
-            flat_list.extend(
-                flatten(
-                    entry,
-                    recursion_level + 1,
-                    treat_list_subclasses_as_list,
-                    treat_tuples_as_lists,
-                    max_recursion,
-                )
-            )
-        elif treat_list_subclasses_as_list and (is_list_subclass or is_numpy or is_sympy):
-            flat_list.extend(
-                flatten(
-                    entry,
-                    recursion_level + 1,
-                    treat_list_subclasses_as_list,
-                    treat_tuples_as_lists,
-                    max_recursion,
-                )
-            )
-        elif treat_tuples_as_lists and is_tuple:
-            flat_list.extend(
-                flatten(
-                    entry,
-                    recursion_level + 1,
-                    treat_list_subclasses_as_list,
-                    treat_tuples_as_lists,
-                    max_recursion,
-                )
-            )
-        else:
-            flat_list.append(entry)
-
-    return flat_list
