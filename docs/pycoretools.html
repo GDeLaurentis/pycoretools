@@ -1,0 +1,370 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pycoretools.concurrency &mdash; pycoretools 0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/doctools.js?v=9a2dae69"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="pycoretools" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pycoretools
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Modules Documentation</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pycoretools</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">pycoretools.concurrency</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.MyProcessPool"><code class="docutils literal notranslate"><span class="pre">MyProcessPool</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.MyThreadPool"><code class="docutils literal notranslate"><span class="pre">MyThreadPool</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.NoDaemonProcess"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcess</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.NoDaemonProcess.daemon"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcess.daemon</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.NoDaemonProcessPool"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcessPool</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.NoDaemonProcessPool.Process"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcessPool.Process()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.Progress"><code class="docutils literal notranslate"><span class="pre">Progress</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.Progress.decrement"><code class="docutils literal notranslate"><span class="pre">Progress.decrement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.Progress.increment"><code class="docutils literal notranslate"><span class="pre">Progress.increment()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.Progress.write"><code class="docutils literal notranslate"><span class="pre">Progress.write()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.fakeManager"><code class="docutils literal notranslate"><span class="pre">fakeManager</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.fakeManager.Value"><code class="docutils literal notranslate"><span class="pre">fakeManager.Value()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.fakeValue"><code class="docutils literal notranslate"><span class="pre">fakeValue</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.filterThreads"><code class="docutils literal notranslate"><span class="pre">filterThreads()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.mapThreads"><code class="docutils literal notranslate"><span class="pre">mapThreads()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.progress_wrapper"><code class="docutils literal notranslate"><span class="pre">progress_wrapper()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.worker"><code class="docutils literal notranslate"><span class="pre">worker()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycoretools.context">pycoretools.context</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.context.TemporarySetting"><code class="docutils literal notranslate"><span class="pre">TemporarySetting</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycoretools.decorators">pycoretools.decorators</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.decorators.retry"><code class="docutils literal notranslate"><span class="pre">retry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.decorators.with_cm"><code class="docutils literal notranslate"><span class="pre">with_cm()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycoretools.iterables">pycoretools.iterables</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.iterables.all_non_empty_subsets"><code class="docutils literal notranslate"><span class="pre">all_non_empty_subsets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.iterables.chunks"><code class="docutils literal notranslate"><span class="pre">chunks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.iterables.crease"><code class="docutils literal notranslate"><span class="pre">crease()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.iterables.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycoretools.sentinels">pycoretools.sentinels</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.sentinels.NotAnInteger"><code class="docutils literal notranslate"><span class="pre">NotAnInteger</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.sentinels.Singleton"><code class="docutils literal notranslate"><span class="pre">Singleton</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-pycoretools">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.TemporarySetting"><code class="docutils literal notranslate"><span class="pre">TemporarySetting</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.all_non_empty_subsets"><code class="docutils literal notranslate"><span class="pre">all_non_empty_subsets()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.chunks"><code class="docutils literal notranslate"><span class="pre">chunks()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.crease"><code class="docutils literal notranslate"><span class="pre">crease()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.filterThreads"><code class="docutils literal notranslate"><span class="pre">filterThreads()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.mapThreads"><code class="docutils literal notranslate"><span class="pre">mapThreads()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.retry"><code class="docutils literal notranslate"><span class="pre">retry()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.with_cm"><code class="docutils literal notranslate"><span class="pre">with_cm()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pycoretools</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pycoretools</a></li>
+      <li class="breadcrumb-item active">pycoretools.concurrency</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pycoretools.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pycoretools.concurrency">
+<span id="pycoretools-concurrency"></span><h1>pycoretools.concurrency<a class="headerlink" href="#module-pycoretools.concurrency" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycoretools.concurrency.MyProcessPool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">MyProcessPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start_method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fork'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.MyProcessPool" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycoretools.concurrency.MyThreadPool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">MyThreadPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.MyThreadPool" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycoretools.concurrency.NoDaemonProcess">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">NoDaemonProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">daemon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.NoDaemonProcess" title="Link to this definition"></a></dt>
+<dd><dl class="py property">
+<dt class="sig sig-object py" id="pycoretools.concurrency.NoDaemonProcess.daemon">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">daemon</span></span><a class="headerlink" href="#pycoretools.concurrency.NoDaemonProcess.daemon" title="Link to this definition"></a></dt>
+<dd><p>Return whether process is a daemon</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycoretools.concurrency.NoDaemonProcessPool">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">NoDaemonProcessPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxtasksperchild</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.NoDaemonProcessPool" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="pycoretools.concurrency.NoDaemonProcessPool.Process">
+<span class="sig-name descname"><span class="pre">Process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.NoDaemonProcessPool.Process" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycoretools.concurrency.Progress">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">Progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">maximum</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">UseParallelisation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Cores</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.Progress" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="pycoretools.concurrency.Progress.decrement">
+<span class="sig-name descname"><span class="pre">decrement</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.Progress.decrement" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycoretools.concurrency.Progress.increment">
+<span class="sig-name descname"><span class="pre">increment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.Progress.increment" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pycoretools.concurrency.Progress.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.Progress.write" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycoretools.concurrency.fakeManager">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">fakeManager</span></span><a class="headerlink" href="#pycoretools.concurrency.fakeManager" title="Link to this definition"></a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="pycoretools.concurrency.fakeManager.Value">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Value</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.fakeManager.Value" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycoretools.concurrency.fakeValue">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">fakeValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type_</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">init_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.fakeValue" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.concurrency.filterThreads">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">filterThreads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lambda_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.filterThreads" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.concurrency.mapThreads">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">mapThreads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.mapThreads" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.concurrency.progress_wrapper">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">progress_wrapper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.progress_wrapper" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.concurrency.worker">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">worker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.worker" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pycoretools.context">
+<span id="pycoretools-context"></span><h1>pycoretools.context<a class="headerlink" href="#module-pycoretools.context" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycoretools.context.TemporarySetting">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.context.</span></span><span class="sig-name descname"><span class="pre">TemporarySetting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_or_module_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setting_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.context.TemporarySetting" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pycoretools.decorators">
+<span id="pycoretools-decorators"></span><h1>pycoretools.decorators<a class="headerlink" href="#module-pycoretools.decorators" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.decorators.retry">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.decorators.</span></span><span class="sig-name descname"><span class="pre">retry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ExceptionsToCheck</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.decorators.retry" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.decorators.with_cm">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.decorators.</span></span><span class="sig-name descname"><span class="pre">with_cm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.decorators.with_cm" title="Link to this definition"></a></dt>
+<dd><p>A decorator that applies a context manager to the function.
+This allows a <cite>with</cite> statement to be used as a decorator.</p>
+</dd></dl>
+
+</section>
+<section id="module-pycoretools.iterables">
+<span id="pycoretools-iterables"></span><h1>pycoretools.iterables<a class="headerlink" href="#module-pycoretools.iterables" title="Link to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.iterables.all_non_empty_subsets">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.iterables.</span></span><span class="sig-name descname"><span class="pre">all_non_empty_subsets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.iterables.all_non_empty_subsets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.iterables.chunks">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.iterables.</span></span><span class="sig-name descname"><span class="pre">chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.iterables.chunks" title="Link to this definition"></a></dt>
+<dd><p>Yield successive n-sized chunks from l.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.iterables.crease">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.iterables.</span></span><span class="sig-name descname"><span class="pre">crease</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">called_recursively</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.iterables.crease" title="Link to this definition"></a></dt>
+<dd><p>Inverse function to flatten. Requires a template to define the shape. Rugged shape is supported.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.iterables.flatten">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.iterables.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursion_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treat_list_subclasses_as_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treat_tuples_as_lists</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_recursion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.iterables.flatten" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pycoretools.sentinels">
+<span id="pycoretools-sentinels"></span><h1>pycoretools.sentinels<a class="headerlink" href="#module-pycoretools.sentinels" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycoretools.sentinels.NotAnInteger">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.sentinels.</span></span><span class="sig-name descname"><span class="pre">NotAnInteger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.sentinels.NotAnInteger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pycoretools.sentinels.Singleton">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.sentinels.</span></span><span class="sig-name descname"><span class="pre">Singleton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.sentinels.Singleton" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-pycoretools">
+<span id="module-contents"></span><h1>Module contents<a class="headerlink" href="#module-pycoretools" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pycoretools.TemporarySetting">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.</span></span><span class="sig-name descname"><span class="pre">TemporarySetting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">module_or_module_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">setting_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.TemporarySetting" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.all_non_empty_subsets">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.</span></span><span class="sig-name descname"><span class="pre">all_non_empty_subsets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.all_non_empty_subsets" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.chunks">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.</span></span><span class="sig-name descname"><span class="pre">chunks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">l</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.chunks" title="Link to this definition"></a></dt>
+<dd><p>Yield successive n-sized chunks from l.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.crease">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.</span></span><span class="sig-name descname"><span class="pre">crease</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">called_recursively</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.crease" title="Link to this definition"></a></dt>
+<dd><p>Inverse function to flatten. Requires a template to define the shape. Rugged shape is supported.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.filterThreads">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.</span></span><span class="sig-name descname"><span class="pre">filterThreads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lambda_func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.filterThreads" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.flatten">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.</span></span><span class="sig-name descname"><span class="pre">flatten</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">temp_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursion_level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treat_list_subclasses_as_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">treat_tuples_as_lists</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_recursion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.flatten" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.mapThreads">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.</span></span><span class="sig-name descname"><span class="pre">mapThreads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.mapThreads" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.retry">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.</span></span><span class="sig-name descname"><span class="pre">retry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ExceptionsToCheck</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_tries</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.retry" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.with_cm">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.</span></span><span class="sig-name descname"><span class="pre">with_cm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.with_cm" title="Link to this definition"></a></dt>
+<dd><p>A decorator that applies a context manager to the function.
+This allows a <cite>with</cite> statement to be used as a decorator.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="pycoretools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, Giuseppe De Laurentis.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
