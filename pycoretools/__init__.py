@@ -1,5 +1,5 @@
 from .version import __version__
-from .concurrency import mapThreads, filterThreads
+from .concurrency import mapThreads, filterThreads, default_cores
 from .context import TemporarySetting
 from .decorators import with_cm, retry
 from .iterables import flatten, crease, chunks, all_non_empty_subsets
@@ -10,6 +10,7 @@ __all__ = [
     "TemporarySetting",
     "filterThreads",
     "mapThreads",
+    "default_cores",
     "with_cm",
     "retry",
     "flatten",

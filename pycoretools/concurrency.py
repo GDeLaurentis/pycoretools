@@ -19,6 +19,11 @@ default_start_method = multiprocessing.get_context().get_start_method()
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 
+def default_cores():
+    n = os.cpu_count() or 1
+    return max(1, min(n // 4, 16))
+
+
 class fakeValue(object):
 
     def __init__(self, type_, init_value):
@@ -203,7 +208,7 @@ def mapThreads(func, *args, **kwargs):
     # Default keyword arguments
     UseParallelisation = kwargs.pop("UseParallelisation", True)
     ParallelisationType = kwargs.pop("ParallelisationType", ('Thread', 'Process')[1])
-    Cores = kwargs.pop("Cores", os.cpu_count() // 2)
+    Cores = kwargs.pop("Cores", default_cores())
     verbose = kwargs.pop("verbose", True)
     resume_pickle = kwargs.pop("resume_pickle", None)          # NEW: optional resume/checkpoint file
     mp_start_method = kwargs.pop("mp_start_method", default_start_method)
