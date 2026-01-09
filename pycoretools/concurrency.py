@@ -9,6 +9,7 @@ import pickle
 import sys
 import time
 import threading
+import inspect
 
 from .context import TemporarySetting
 
@@ -28,6 +29,24 @@ def _is_picklable(obj) -> bool:
     try:
         pickle.dumps(obj)
         return True
+    except Exception:
+        return False
+    
+
+def _is_spawn_safe_callable(func) -> bool:
+    """
+    True if func can be imported by a spawned process.
+    """
+    try:
+        mod = inspect.getmodule(func)
+        if mod is None:
+            return False
+        # must come from a real .py file, not __main__ or built-in
+        mod_file = getattr(mod, "__file__", None)
+        if mod_file is None:
+            return False
+        # function must be a top-level attribute of the module
+        return getattr(mod, func.__name__, None) is func
     except Exception:
         return False
 
@@ -322,6 +341,12 @@ def mapThreads(func, *args, **kwargs):
                     "requires a picklable function.\nLambdas and locally-defined functions "
                     "are not supported. Define the function at module scope."
                 )
+            elif not _is_spawn_safe_callable(func):
+                raise RuntimeError(
+                    "mapThreads(..., mp_start_method='spawn') requires the function to be "
+                    "defined at module scope in an importable .py file.\n"
+                    "Lambdas, locally-defined functions, and notebook-defined functions are not supported."
+                )
 
     if UseParallelisation is True:
         l = multiprocessing.Lock()
@@ -362,3 +387,8 @@ def filterThreads(lambda_func, iterable):
     TrueOrFalseList = mapThreads(lambda_func, iterable)
     iterable = [entry for i, entry in enumerate(iterable) if TrueOrFalseList[i] is True]
     return iterable
+
+
+def _incr(x):
+    """Dummpy helper for tests and tests in notebooks"""
+    return x + 1

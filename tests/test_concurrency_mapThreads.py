@@ -1,7 +1,7 @@
 import pytest
 
 from multiprocessing import Pool
-from pycoretools.concurrency import mapThreads, MyProcessPool, _init, _in_worker, worker
+from pycoretools.concurrency import mapThreads, MyProcessPool, _init, _in_worker, worker, _incr
 
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -61,9 +61,5 @@ def test_in_worker_is_aware_of_being_in_pool():
     assert all(results)
 
 
-def incr(x):
-    return x + 1
-
-
 def test_mapThreads_spawn():
-    assert mapThreads(incr, range(100), Cores=4, mp_start_method='spawn', verbose=False) == list(range(1, 101))
+    assert mapThreads(_incr, range(100), Cores=4, mp_start_method='spawn', verbose=False) == list(range(1, 101))
