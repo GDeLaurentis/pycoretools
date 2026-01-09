@@ -3,14 +3,15 @@ import functools
 import math
 import multiprocessing
 import multiprocessing.pool
+import multiprocessing.util as util
 import os
 import pathlib
 import pickle
 import sys
 import time
 import threading
-import inspect
 
+from multiprocessing.reduction import ForkingPickler
 from .context import TemporarySetting
 
 
@@ -31,22 +32,12 @@ def _is_picklable(obj) -> bool:
         return True
     except Exception:
         return False
-    
 
-def _is_spawn_safe_callable(func) -> bool:
-    """
-    True if func can be imported by a spawned process.
-    """
+
+def _mp_pickleable(obj) -> bool:
     try:
-        mod = inspect.getmodule(func)
-        if mod is None:
-            return False
-        # must come from a real .py file, not __main__ or built-in
-        mod_file = getattr(mod, "__file__", None)
-        if mod_file is None:
-            return False
-        # function must be a top-level attribute of the module
-        return getattr(mod, func.__name__, None) is func
+        ForkingPickler.dumps(obj)
+        return True
     except Exception:
         return False
 
@@ -122,23 +113,27 @@ class Progress(object):
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 
-class NoDaemonProcess(multiprocessing.Process):
-
-    def _get_daemon(self):  # make 'daemon' attribute always return False
-        return False
-
-    def _set_daemon(self, value):
-        pass
-
-    daemon = property(_get_daemon, _set_daemon)
-
-
 class NoDaemonProcessPool(multiprocessing.pool.Pool):
-    # see https://stackoverflow.com/questions/52948447/error-group-argument-must-be-none-for-now-in-multiprocessing-pool
-    def Process(self, *args, **kwargs):
-        proc = super(NoDaemonProcessPool, self).Process(*args, **kwargs)
-        proc.__class__ = NoDaemonProcess
-        return proc
+    # Original fix (before 2026) followed https://stackoverflow.com/questions/52948447/error-group-argument-must-be-none-for-now-in-multiprocessing-pool
+    # Use this to check the stdlib source, the override should only be w.daemon = False
+    # import multiprocessing.pool; import inspect;
+    # print(inspect.getsource(multiprocessing.pool.Pool._repopulate_pool_static))
+    @staticmethod
+    def _repopulate_pool_static(ctx, Process, processes, pool, inqueue,
+                                outqueue, initializer, initargs,
+                                maxtasksperchild, wrap_exception):
+        """Same as stdlib, but workers are NOT daemonic (so they can have children)."""
+        for _ in range(processes - len(pool)):
+            w = Process(ctx, target=multiprocessing.pool.worker,
+                        args=(inqueue, outqueue,
+                              initializer,
+                              initargs, maxtasksperchild,
+                              wrap_exception))
+            w.name = w.name.replace('Process', 'PoolWorker')
+            w.daemon = False  # <-- the crucial change
+            w.start()
+            pool.append(w)
+            util.debug('added worker')
 
 
 class MyProcessPool:
@@ -146,27 +141,31 @@ class MyProcessPool:
         self.processes = processes
         self.initializer = initializer
         self.initargs = initargs
-        # print("Got:", start_method)  # for debugging
-        self.start_method = start_method  # None, "spawn", "fork", "forkserver"
-        self._old_start_method = None
-        self._changed_start_method = False
+        self.start_method = start_method
 
     def __enter__(self):
-        self._old_start_method = multiprocessing.get_start_method()
-        if self._old_start_method != self.start_method:
-            # print(f"Changing start method from {old} to {self.start_method}")  # for debugging
-            multiprocessing.set_start_method(self.start_method, force=True)
-
-        self.obj = NoDaemonProcessPool(self.processes, self.initializer, self.initargs)
-        # self.obj = multiprocessing.Pool(self.processes, self.initializer, self.initargs)
+        ctx = multiprocessing.get_context(self.start_method)
+        self.obj = NoDaemonProcessPool(
+            self.processes,
+            initializer=self.initializer,
+            initargs=self.initargs,
+            context=ctx,
+        )
+        if True:  # for debugging
+            print(
+                f"[MyProcessPool] requested={self.start_method} "
+                f"pool_ctx={getattr(self.obj, '_ctx', None).get_start_method()} "
+                f"default={multiprocessing.get_start_method(allow_none=True)}"
+            )
         return self.obj
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.obj.close()
-        self.obj.join()
-        self.obj.terminate()
-        if self._old_start_method != self.start_method:
-            multiprocessing.set_start_method(self._old_start_method, force=True)
+        if exc_type is None:
+            self.obj.close()
+            self.obj.join()
+        else:
+            self.obj.terminate()
+            self.obj.join()
 
 
 class MyThreadPool(object):      # context manager pool (no new processes, currently affected by GIL)
@@ -239,6 +238,7 @@ def mapThreads(func, *args, **kwargs):
     verbose = kwargs.pop("verbose", True)
     resume_pickle = kwargs.pop("resume_pickle", None)          # NEW: optional resume/checkpoint file
     mp_start_method = kwargs.pop("mp_start_method", default_start_method)
+    ctx = multiprocessing.get_context(mp_start_method)
 
     if _in_worker():  # Auto-silence nested calls to avoid jumbled progress output
         verbose = False
@@ -341,15 +341,17 @@ def mapThreads(func, *args, **kwargs):
                     "requires a picklable function.\nLambdas and locally-defined functions "
                     "are not supported. Define the function at module scope."
                 )
-            elif not _is_spawn_safe_callable(func):
-                raise RuntimeError(
-                    "mapThreads(..., mp_start_method='spawn') requires the function to be "
-                    "defined at module scope in an importable .py file.\n"
-                    "Lambdas, locally-defined functions, and notebook-defined functions are not supported."
+            elif not _mp_pickleable(func_partial):
+                raise TypeError(
+                    "mapThreads(..., mp_start_method='spawn') requires the mapped callable "
+                    "(including any functools.partial binding) to be multiprocessing-picklable.\n"
+                    "This excludes lambdas and locally-defined functions. "
+                    "Top-level functions and functools.partial(top_level_func, ...) are supported "
+                    "as long as bound args/kwargs are picklable."
                 )
 
     if UseParallelisation is True:
-        l = multiprocessing.Lock()
+        l = ctx.Lock()
         if verbose:
             p = Progress(len(iterable), UseParallelisation, Cores)
         else:
