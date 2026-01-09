@@ -24,6 +24,14 @@ def default_cores():
     return max(1, min(n // 4, 16))
 
 
+def _is_picklable(obj) -> bool:
+    try:
+        pickle.dumps(obj)
+        return True
+    except Exception:
+        return False
+
+
 class fakeValue(object):
 
     def __init__(self, type_, init_value):
@@ -305,6 +313,15 @@ def mapThreads(func, *args, **kwargs):
         func_partial = functools.partial(progress_wrapper, base_func)
     else:
         func_partial = base_func
+
+    if UseParallelisation and ParallelisationType.lower().startswith("process"):
+        if mp_start_method in ("spawn", "forkserver"):
+            if not _is_picklable(func_partial):
+                raise TypeError(
+                    f"mapThreads(..., ParallelisationType={ParallelisationType}, mp_start_method={mp_start_method}) "
+                    "requires a picklable function.\nLambdas and locally-defined functions "
+                    "are not supported. Define the function at module scope."
+                )
 
     if UseParallelisation is True:
         l = multiprocessing.Lock()

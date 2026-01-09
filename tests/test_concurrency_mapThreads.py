@@ -59,3 +59,11 @@ def test_in_worker_is_aware_of_being_in_pool():
         results = pool.map(worker, range(2))
 
     assert all(results)
+
+
+def incr(x):
+    return x + 1
+
+
+def test_mapThreads_spawn():
+    assert mapThreads(incr, range(100), Cores=4, mp_start_method='spawn', verbose=False) == list(range(1, 101))
