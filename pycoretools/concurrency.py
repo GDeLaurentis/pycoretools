@@ -151,7 +151,7 @@ class MyProcessPool:
             initargs=self.initargs,
             context=ctx,
         )
-        if True:  # for debugging
+        if False:  # for debugging
             print(
                 f"[MyProcessPool] requested={self.start_method} "
                 f"pool_ctx={getattr(self.obj, '_ctx', None).get_start_method()} "
