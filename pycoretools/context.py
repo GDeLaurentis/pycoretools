@@ -3,7 +3,7 @@ import importlib
 
 class TemporarySetting:
     def __init__(self, module_or_module_name, setting_name, new_value):
-        self._is_mapping = isinstance(module_or_module_name, dict)
+        self._is_mapping = type(module_or_module_name) is dict
 
         if self._is_mapping:  # e.g. globals()
             self.namespace = module_or_module_name
