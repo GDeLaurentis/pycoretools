@@ -3,7 +3,10 @@
 [![CI Lint](https://github.com/GDeLaurentis/pycoretools/actions/workflows/ci_lint.yml/badge.svg)](https://github.com/GDeLaurentis/pycoretools/actions/workflows/ci_lint.yml)
 [![CI Test](https://github.com/GDeLaurentis/pycoretools/actions/workflows/ci_test.yml/badge.svg)](https://github.com/GDeLaurentis/pycoretools/actions/workflows/ci_test.yml)
 [![Coverage](https://img.shields.io/badge/Coverage-58%25-orange?labelColor=2a2f35)](https://github.com/GDeLaurentis/pycoretools/actions)
+[![Docs](https://github.com/GDeLaurentis/pycoretools/actions/workflows/cd_docs.yml/badge.svg?label=Docs)](https://gdelaurentis.github.io/pycoretools/)
 [![PyPI](https://img.shields.io/pypi/v/pycoretools?label=PyPI)](https://pypi.org/project/pycoretools/)
+[![PyPI Downloads](https://img.shields.io/pypi/dm/pycoretools.svg?label=PyPI%20downloads)](https://pypistats.org/packages/pycoretools)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/GDeLaurentis/pycoretools/HEAD)
 [![Python](https://img.shields.io/pypi/pyversions/pycoretools?label=Python)](https://pypi.org/project/pycoretools/)
 
 `pycoretools` is a lightweight collection of **generic, low-level utilities** that are reused across multiple Python projects.
