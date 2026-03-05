@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Overall, fix Python 3.11 SemLock context errors and CUDA + multiprocessing incompatibilities, keeping behaviour stable on Python 3.10
+- Fix Python 3.11 `SemLock` context errors and CUDA + multiprocessing incompatibilities, behaviour stable on Python 3.10
 - Use explicit multiprocessing contexts instead of mutating the global start method
 - Ensure Locks and Pools are created from the same context (fork/spawn)
 - Fixed pool shutdown semantics
