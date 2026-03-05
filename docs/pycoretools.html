@@ -6,14 +6,14 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>pycoretools.concurrency &mdash; pycoretools 0.1.0 documentation</title>
+  <title>pycoretools.concurrency &mdash; pycoretools 0.1.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
-      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
 
   
       <script src="_static/jquery.js?v=5d32c60e"></script>
       <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-      <script src="_static/documentation_options.js?v=01f34227"></script>
+      <script src="_static/documentation_options.js?v=a58bc63e"></script>
       <script src="_static/doctools.js?v=9a2dae69"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/js/theme.js"></script>
@@ -47,20 +47,14 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">pycoretools.concurrency</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.MyProcessPool"><code class="docutils literal notranslate"><span class="pre">MyProcessPool</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.MyThreadPool"><code class="docutils literal notranslate"><span class="pre">MyThreadPool</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.NoDaemonProcess"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcess</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.NoDaemonProcess.daemon"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcess.daemon</span></code></a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.NoDaemonProcessPool"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcessPool</span></code></a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.NoDaemonProcessPool.Process"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcessPool.Process()</span></code></a></li>
-</ul>
-</li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.NoDaemonProcessPool"><code class="docutils literal notranslate"><span class="pre">NoDaemonProcessPool</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.Progress"><code class="docutils literal notranslate"><span class="pre">Progress</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.Progress.decrement"><code class="docutils literal notranslate"><span class="pre">Progress.decrement()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.Progress.increment"><code class="docutils literal notranslate"><span class="pre">Progress.increment()</span></code></a></li>
 <li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.Progress.write"><code class="docutils literal notranslate"><span class="pre">Progress.write()</span></code></a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.default_cores"><code class="docutils literal notranslate"><span class="pre">default_cores()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pycoretools.concurrency.fakeManager"><code class="docutils literal notranslate"><span class="pre">fakeManager</span></code></a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#pycoretools.concurrency.fakeManager.Value"><code class="docutils literal notranslate"><span class="pre">fakeManager.Value()</span></code></a></li>
 </ul>
@@ -98,6 +92,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#pycoretools.all_non_empty_subsets"><code class="docutils literal notranslate"><span class="pre">all_non_empty_subsets()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pycoretools.chunks"><code class="docutils literal notranslate"><span class="pre">chunks()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pycoretools.crease"><code class="docutils literal notranslate"><span class="pre">crease()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pycoretools.default_cores"><code class="docutils literal notranslate"><span class="pre">default_cores()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pycoretools.filterThreads"><code class="docutils literal notranslate"><span class="pre">filterThreads()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pycoretools.flatten"><code class="docutils literal notranslate"><span class="pre">flatten()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#pycoretools.mapThreads"><code class="docutils literal notranslate"><span class="pre">mapThreads()</span></code></a></li>
@@ -147,25 +142,9 @@
 <dd></dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="pycoretools.concurrency.NoDaemonProcess">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">NoDaemonProcess</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">daemon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.NoDaemonProcess" title="Link to this definition"></a></dt>
-<dd><dl class="py property">
-<dt class="sig sig-object py" id="pycoretools.concurrency.NoDaemonProcess.daemon">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">daemon</span></span><a class="headerlink" href="#pycoretools.concurrency.NoDaemonProcess.daemon" title="Link to this definition"></a></dt>
-<dd><p>Return whether process is a daemon</p>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="pycoretools.concurrency.NoDaemonProcessPool">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">NoDaemonProcessPool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">processes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initializer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initargs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">()</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxtasksperchild</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">context</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.NoDaemonProcessPool" title="Link to this definition"></a></dt>
-<dd><dl class="py method">
-<dt class="sig sig-object py" id="pycoretools.concurrency.NoDaemonProcessPool.Process">
-<span class="sig-name descname"><span class="pre">Process</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.NoDaemonProcessPool.Process" title="Link to this definition"></a></dt>
 <dd></dd></dl>
-
-</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycoretools.concurrency.Progress">
@@ -186,6 +165,11 @@
 <dd></dd></dl>
 
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.concurrency.default_cores">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.concurrency.</span></span><span class="sig-name descname"><span class="pre">default_cores</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.concurrency.default_cores" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="pycoretools.concurrency.fakeManager">
@@ -307,6 +291,11 @@ This allows a <cite>with</cite> statement to be used as a decorator.</p>
 <span class="sig-prename descclassname"><span class="pre">pycoretools.</span></span><span class="sig-name descname"><span class="pre">crease</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iterable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">template</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">depth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">called_recursively</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.crease" title="Link to this definition"></a></dt>
 <dd><p>Inverse function to flatten. Requires a template to define the shape. Rugged shape is supported.</p>
 </dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pycoretools.default_cores">
+<span class="sig-prename descclassname"><span class="pre">pycoretools.</span></span><span class="sig-name descname"><span class="pre">default_cores</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pycoretools.default_cores" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pycoretools.filterThreads">
