@@ -384,9 +384,9 @@ def mapThreads(func, *args, **kwargs):
     return results
 
 
-def filterThreads(lambda_func, iterable):
+def filterThreads(lambda_func, iterable, **kwargs):
     lambda_func.__name__ = str("filterThreads")
-    TrueOrFalseList = mapThreads(lambda_func, iterable)
+    TrueOrFalseList = mapThreads(lambda_func, iterable, **kwargs)
     iterable = [entry for i, entry in enumerate(iterable) if TrueOrFalseList[i] is True]
     return iterable
 
