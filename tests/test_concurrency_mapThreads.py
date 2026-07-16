@@ -2,6 +2,7 @@ import pytest
 import multiprocessing
 import multiprocessing.pool as mp_pool
 import inspect
+import time
 
 from multiprocessing import Pool
 from pycoretools.concurrency import mapThreads, MyProcessPool, _init, _in_worker, worker, _incr, default_start_method
@@ -105,3 +106,17 @@ def test_global_context_unaffected_by_start_method():
     assert multiprocessing.get_context().get_start_method() == default_start_method
     assert mapThreads(_incr, range(100), Cores=4, mp_start_method='fork', verbose=False) == list(range(1, 101))
     assert multiprocessing.get_context().get_start_method() == default_start_method
+
+
+def test_nesting_process_and_thread_concurrency():
+    def inner_thread_task(value):
+        return value * value
+
+    def outer_process_task(value):
+        time.sleep(0.15)
+        inner_results = mapThreads(inner_thread_task, [1, 2, 3], Cores=2, ParallelisationType="Thread", UseParallelisation=True, verbose=True, )
+        return value + sum(inner_results)
+
+    results = mapThreads(outer_process_task, [10, 20, 30, 40, 50, 60, 70, 80, 90],
+                         Cores=2, ParallelisationType="Process", UseParallelisation=True, verbose=True, progress_new_line=True,)
+    assert results == [24, 34, 44, 54, 64, 74, 84, 94, 104]

@@ -190,12 +190,13 @@ class MyThreadPool(object):      # context manager pool (no new processes, curre
 
 
 def progress_wrapper(func, *args, progress_new_line=False, **kwargs):
+    progress_obj = globals().get("prog")
     lock_obj = globals().get("lock")
     lock_cm = lock_obj or contextlib.nullcontext()
     with lock_cm:
         underlying = getattr(func, "func", func)
         func_name = getattr(underlying, "__name__", "function")
-        prog_msg = prog.write()
+        prog_msg = progress_obj.write()
         if prog_msg is not False:
             args_msg = (  # use type to avoid subclasses
                 ", ".join(args[-1]) if type(args[-1]) in [list, tuple] and isinstance(args[-1][0], str) and len(", ".join(args[-1])) < 40 else
@@ -209,7 +210,7 @@ def progress_wrapper(func, *args, progress_new_line=False, **kwargs):
                 sys.stdout.flush()
     res = func(*args, **kwargs)
     with lock_cm:
-        prog.increment()
+        progress_obj.increment()
     return res
 
 
@@ -231,6 +232,17 @@ def _init(l, p, func, ):
     lock = l
     prog = p
     _lambda_compatible_func = func
+    _pool_ctx.in_pool = True
+
+
+def thread_worker(x):
+    return _pool_ctx.func(x)
+
+
+def _init_thread(l, p, func):
+    _pool_ctx.lock = l
+    _pool_ctx.prog = p
+    _pool_ctx.func = func
     _pool_ctx.in_pool = True
 
 
@@ -365,8 +377,8 @@ def mapThreads(func, *args, **kwargs):
             with MyProcessPool(Cores, initializer=_init, initargs=(l, p, func_partial,), start_method=mp_start_method) as pool:
                 results = pool.map(worker, iterable)
         elif ParallelisationType == 'Thread' or ParallelisationType == 'Threading':
-            with MyThreadPool(Cores, initializer=_init, initargs=(l, p, func_partial,)) as pool:
-                results = pool.map(worker, iterable)
+            with MyThreadPool(Cores, initializer=_init_thread, initargs=(l, p, func_partial,)) as pool:
+                results = pool.map(thread_worker, iterable)
         else:
             raise ValueError("ParallelisationType must be either Process(ing) or Thread(ing).")
     else:
