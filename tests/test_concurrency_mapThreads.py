@@ -2,6 +2,7 @@ import pytest
 import multiprocessing
 import multiprocessing.pool as mp_pool
 import inspect
+import functools
 import time
 
 from multiprocessing import Pool
@@ -108,15 +109,30 @@ def test_global_context_unaffected_by_start_method():
     assert multiprocessing.get_context().get_start_method() == default_start_method
 
 
-def test_nesting_process_and_thread_concurrency():
-    def inner_thread_task(value):
-        return value * value
+def _inner_concurrency_task(value):
+    return value * value
 
-    def outer_process_task(value):
-        time.sleep(0.15)
-        inner_results = mapThreads(inner_thread_task, [1, 2, 3], Cores=2, ParallelisationType="Thread", UseParallelisation=True, verbose=True, )
-        return value + sum(inner_results)
 
-    results = mapThreads(outer_process_task, [10, 20, 30, 40, 50, 60, 70, 80, 90],
-                         Cores=2, ParallelisationType="Process", UseParallelisation=True, verbose=True, progress_new_line=True,)
+def _outer_concurrency_task(value, inner_parallelisation_type):
+    time.sleep(0.15)
+    inner_results = mapThreads(
+        _inner_concurrency_task, [1, 2, 3], Cores=2, ParallelisationType=inner_parallelisation_type, UseParallelisation=True, verbose=True,
+    )
+    return value + sum(inner_results)
+
+
+def _test_nested_concurrency(outer_parallelisation_type, inner_parallelisation_type):
+    outer_task = functools.partial(_outer_concurrency_task, inner_parallelisation_type=inner_parallelisation_type)
+    results = mapThreads(
+        outer_task, [10, 20, 30, 40, 50, 60, 70, 80, 90],
+        Cores=2, ParallelisationType=outer_parallelisation_type, UseParallelisation=True, verbose=True, progress_new_line=True,
+    )
     assert results == [24, 34, 44, 54, 64, 74, 84, 94, 104]
+
+
+def test_nesting_process_and_thread_concurrency():
+    _test_nested_concurrency("Process", "Thread")
+
+
+def test_nesting_thread_and_process_concurrency():
+    _test_nested_concurrency("Thread", "Process")

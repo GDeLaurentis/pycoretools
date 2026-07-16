@@ -190,8 +190,8 @@ class MyThreadPool(object):      # context manager pool (no new processes, curre
 
 
 def progress_wrapper(func, *args, progress_new_line=False, **kwargs):
-    progress_obj = globals().get("prog")
-    lock_obj = globals().get("lock")
+    progress_obj = getattr(_pool_ctx, "prog", globals().get("prog"))
+    lock_obj = getattr(_pool_ctx, "lock", globals().get("lock"))
     lock_cm = lock_obj or contextlib.nullcontext()
     with lock_cm:
         underlying = getattr(func, "func", func)
