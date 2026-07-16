@@ -189,7 +189,7 @@ class MyThreadPool(object):      # context manager pool (no new processes, curre
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
 
-def progress_wrapper(func, *args, **kwargs):
+def progress_wrapper(func, *args, progress_new_line=False, **kwargs):
     lock_obj = globals().get("lock")
     lock_cm = lock_obj or contextlib.nullcontext()
     with lock_cm:
@@ -201,8 +201,12 @@ def progress_wrapper(func, *args, **kwargs):
                 ", ".join(args[-1]) if type(args[-1]) in [list, tuple] and isinstance(args[-1][0], str) and len(", ".join(args[-1])) < 40 else
                 str(args[-1]).replace("\n", "") if len(str(args[-1]).replace("\n", "")) < 40 else "N/A"
             )
-            print(f"\r{func_name} {prog_msg} working on {args_msg}.                                   ", end="\r")
-            sys.stdout.flush()
+            msg = f"{func_name} {prog_msg} working on {args_msg}."
+            if progress_new_line:
+                print(msg, flush=True)
+            else:
+                print(f"\r{msg}                                   ", end="\r")
+                sys.stdout.flush()
     res = func(*args, **kwargs)
     with lock_cm:
         prog.increment()
@@ -236,6 +240,7 @@ def mapThreads(func, *args, **kwargs):
     ParallelisationType = kwargs.pop("ParallelisationType", ('Thread', 'Process')[1])
     Cores = kwargs.pop("Cores", default_cores())
     verbose = kwargs.pop("verbose", True)
+    progress_new_line = kwargs.pop("progress_new_line", False)
     resume_pickle = kwargs.pop("resume_pickle", None)          # NEW: optional resume/checkpoint file
     mp_start_method = kwargs.pop("mp_start_method", default_start_method)
     ctx = multiprocessing.get_context(mp_start_method)
@@ -329,7 +334,7 @@ def mapThreads(func, *args, **kwargs):
         base_func = _func_partial
 
     if verbose:
-        func_partial = functools.partial(progress_wrapper, base_func)
+        func_partial = functools.partial(progress_wrapper, base_func, progress_new_line=progress_new_line)
     else:
         func_partial = base_func
 
@@ -371,7 +376,7 @@ def mapThreads(func, *args, **kwargs):
         with TemporarySetting(_pool_ctx, "in_pool", verbose):
             results = list(map(func_partial, iterable))
 
-    if verbose:
+    if verbose and not progress_new_line:
         print("\r                                                                                                                   ", end="\r")
         sys.stdout.flush()
 
