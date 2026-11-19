@@ -199,7 +199,7 @@ def progress_wrapper(func, *args, progress_new_line=False, **kwargs):
         prog_msg = progress_obj.write()
         if prog_msg is not False:
             args_msg = (  # use type to avoid subclasses
-                ", ".join(args[-1]) if type(args[-1]) in [list, tuple] and isinstance(args[-1][0], str) and len(", ".join(args[-1])) < 40 else
+                ", ".join(args[-1]) if type(args[-1]) in [list, tuple] and all(isinstance(item, str) for item in args[-1]) and len(", ".join(args[-1])) < 40 else
                 str(args[-1]).replace("\n", "") if len(str(args[-1]).replace("\n", "")) < 40 else "N/A"
             )
             msg = f"{func_name} {prog_msg} working on {args_msg}."
