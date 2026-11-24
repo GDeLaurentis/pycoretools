@@ -10,7 +10,7 @@ with (this_directory / "pycoretools" / "version.py").open() as f:
 setup(
     name='pycoretools',
     version=version,
-    license='GNU General Public License v3.0',
+    license='GPL-3.0-or-later',
     description='Core Tools for Python Projects',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -24,7 +24,6 @@ setup(
         'Development Status :: 4 - Beta',
         'Intended Audience :: Science/Research',
         'Topic :: Scientific/Engineering :: Physics',
-        'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Programming Language :: Python :: 3.9',
         'Programming Language :: Python :: 3.10',
         'Programming Language :: Python :: 3.11',
