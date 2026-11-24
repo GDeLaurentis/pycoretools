@@ -33,9 +33,8 @@ class TemporarySetting:
                 self.old_value = getattr(self.module, self.setting_name)
                 setattr(self.module, self.setting_name, self.new_value)
             else:
-                raise AttributeError(
-                    f"Setting '{self.setting_name}' does not exist in module '{self.module.__name__}'"
-                )
+                target_name = getattr(self.module, "__name__", type(self.module).__name__)
+                raise AttributeError(f"Setting '{self.setting_name}' does not exist in '{target_name}'")
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         if self._is_mapping:
